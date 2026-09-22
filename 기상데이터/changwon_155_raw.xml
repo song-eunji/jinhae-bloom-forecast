@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response><header><resultCode>99</resultCode><resultMsg>데이터요청은 한번에 최대 1,000건을 넘을 수 없습니다.</resultMsg></header></response>
