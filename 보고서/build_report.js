@@ -98,31 +98,6 @@ function mkTable(headers, rows, colWidths) {
   });
 }
 
-// 붙임2(분석보고서 서식) 공식 양식처럼, 대항목마다 테두리 박스로 감싼다.
-const CONTENT_WIDTH = 9638; // 11906(A4) - 1134*2(margin)
-function box(children, borderColor = "7A3654") {
-  const border = { style: BorderStyle.SINGLE, size: 6, color: borderColor };
-  return new Table({
-    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
-    columnWidths: [CONTENT_WIDTH],
-    rows: [
-      new TableRow({
-        children: [
-          new TableCell({
-            width: { size: CONTENT_WIDTH, type: WidthType.DXA },
-            margins: { top: 220, bottom: 220, left: 220, right: 220 },
-            borders: { top: border, bottom: border, left: border, right: border },
-            children,
-          }),
-        ],
-      }),
-    ],
-  });
-}
-function spacer() {
-  return new Paragraph({ spacing: { after: 320 } });
-}
-
 const doc = new Document({
   numbering: {
     config: [
@@ -177,19 +152,18 @@ const doc = new Document({
         })],
       }),
 
-      // Ⅰ. 제안과제명 — 공식 서식과 동일하게 박스 처리
-      box([
+      // Ⅰ. 제안과제명
+      ...[
         p("Ⅰ. 제안과제명 :", { bold: true, size: 23, color: "7A3654" }),
         p("적산온도(Degree-Day) 모델을 활용한 진해 벚꽃 개화·만발일 예측 및 진해군항제 개최시기 미스매치 정량화 분석"),
-      ]),
-      spacer(),
+      ],
 
       new Paragraph({ children: [new PageBreak()] }),
 
       h("Ⅱ. 세부 내용", HeadingLevel.HEADING_1),
 
       // ◦ 분석 개요
-      box([
+      ...[
         h("◦ 분석 개요", HeadingLevel.HEADING_2),
         h("가. 분석 목적", HeadingLevel.HEADING_3),
         p("진해군항제는 연간 250만~412만 명이 방문하는 전국 최대 규모의 봄 축제이나, 개최일이 사전에 고정 공지되는 반면 벚꽃 개화시기는 그해 기온에 따라 해마다 변동한다. 본 분석은 다음 네 가지를 목적으로 한다."),
@@ -202,11 +176,10 @@ const doc = new Document({
         p("진해군항제는 2011~2019년 매년 4월 1일~10일로 고정 개최되었다. 그러나 이 기간 중 다수 연도(2013, 2018, 2019년)에 벚꽃이 축제 시작 전 이미 만개를 지나쳐, 방문객이 절정기를 놓치는 문제가 반복적으로 제기되었다. 이에 창원시는 2023년부터 개최일을 3월 말로 앞당기는 조정을 시행했다."),
         p("그러나 이러한 조정은 매년의 경험과 단기 예보에 의존해 왔으며, 장기적·정량적 예측 체계는 부재했다. 특히 기후변화로 국내 벚꽃 개화시기가 전반적으로 빨라지는 추세 속에서(본 분석 3장에서 확인, 이승호·이경미(2003)[2]도 동일한 추세를 보고함), 데이터에 기반해 매년 반복 가능한 예측 프로세스를 마련하는 것이 시급하다."),
         p("실제로 일본에서는 Nagai 등(2019)[6]이 두 도시를 대상으로 벚꽃 개화시기와 축제 개최기간의 일치도를 과거·현재·미래 기후 조건에서 평가한 바 있어, '개화-축제 미스매치'는 국내외적으로 이미 학술적으로 다뤄지고 있는 문제다. 본 분석은 이 문제의식을 진해군항제라는 국내 최대 사례에 적용하고, 나아가 실제 정책 결정에 바로 쓸 수 있는 역산 시뮬레이션까지 확장했다는 점에서 차별점을 갖는다."),
-      ]),
-      spacer(),
+      ],
 
       // ◦ 분석 결과 상세 내용
-      box([
+      ...[
         h("◦ 분석 결과 상세 내용", HeadingLevel.HEADING_2),
         h("가. 분석데이터", HeadingLevel.HEADING_3),
         mkTable(
@@ -241,19 +214,18 @@ const doc = new Document({
 
         centerImg("chart2_trend.png", 470, 184),
         caption("[그림 2] 개화일 평년(1991~2020) 대비 편차 추이 (2000~2026)"),
-
-        centerImg("chart3_scatter.png", 340, 340),
-        caption("[그림 3] 예측일 vs 실제일 산점도 (leave-one-out 교차검증)"),
-
-        centerImg("chart4_regional.png", 440, 220),
-        caption("[그림 4] 창원 개화편차 vs 인접 8개 지점 상관계수"),
-      ]),
-      spacer(),
+      ],
 
       new Paragraph({ children: [new PageBreak()] }),
 
+      centerImg("chart3_scatter.png", 340, 340),
+      caption("[그림 3] 예측일 vs 실제일 산점도 (leave-one-out 교차검증)"),
+
+      centerImg("chart4_regional.png", 440, 220),
+      caption("[그림 4] 창원 개화편차 vs 인접 8개 지점 상관계수"),
+
       // ◦ 결과 해석 및 시사점
-      box([
+      ...[
         h("◦ 결과 해석 및 시사점", HeadingLevel.HEADING_2),
 
         h("가. 예측 모델 성능", HeadingLevel.HEADING_3),
@@ -316,13 +288,10 @@ const doc = new Document({
         p("미스매치와 방문객 수의 상관관계를 검증하고자 했으나, 방문객 데이터가 2013~2019년 6개년으로 표본이 부족하고 이 기간 방문객 수 자체가 지속적으로 증가하는 추세(홍보 강화 등 외부요인)와 뒤섞여 있어, 통계적으로 유의한 관계를 확인하지 못했다(상관계수 r=+0.90이 산출되었으나 표본 부족으로 인과관계 해석은 불가능). 이는 향후 검색량 트렌드 등 대체 지표로 보완이 필요한 부분으로 남겨둔다."),
         p("또한 개화 이후 관상 가능 기간(낙화 시점)은 강수·바람 등 단기 기상 요인에 크게 좌우되어 장기예측이 원천적으로 불가능하다. 이 부분은 4장의 활용방안에서 별도로 다룬다."),
         p("역산 시뮬레이션의 '모델 권장기간(-5일~+4일)'은 실제 축제와 동일한 약 10일 길이를 유지하기 위한 단순화된 가정이며, 관람객 동선·행사 준비기간 등 운영상의 제약은 반영하지 않았다."),
-      ]),
-      spacer(),
-
-      new Paragraph({ children: [new PageBreak()] }),
+      ],
 
       // ◦ 활용방안 및 기대효과
-      box([
+      ...[
         h("◦ 활용방안 및 기대효과", HeadingLevel.HEADING_2),
         h("가. 축제 일정 기획 지원", HeadingLevel.HEADING_3),
         p("매년 1~2월 시점에 그해 1~2월 기온 추이를 입력해 잠정 개화·만발 예측일을 산출, 축제 개최일을 정량적 근거로 조정할 수 있다. 기존의 경험적 판단을 대체하는 것이 아니라, 담당자의 의사결정을 뒷받침하는 정량 지표로 활용한다."),
@@ -375,13 +344,10 @@ const doc = new Document({
         bullet("경험·감에 의존하던 축제 행정을 데이터 기반 의사결정 체계로 전환"),
         bullet("동일 방법론을 마산가고파국화축제 등 창원시 내 다른 계절 축제로 확장 적용 가능"),
         bullet("B2G 라이선싱·플랫폼 제휴를 통한 신규 수익원 창출 및 지역 소상공인과의 상생 구조 마련"),
-      ]),
-      spacer(),
-
-      new Paragraph({ children: [new PageBreak()] }),
+      ],
 
       // ◦ 활용데이터 및 참고 문헌 출처 등
-      box([
+      ...[
         h("◦ 활용데이터 및 참고 문헌 출처 등", HeadingLevel.HEADING_2),
         h("가. 활용 데이터", HeadingLevel.HEADING_3),
         bullet("기상청 기상자료개방포털(data.kma.go.kr) — 지상(종관) ASOS 일자료 Open API"),
@@ -397,12 +363,12 @@ const doc = new Document({
         bullet("[4] Hur, J., Ahn, J.-B., & Shim, K.-M. (2014). The change of cherry first-flowering date over South Korea projected from downscaled IPCC AR5 simulation. International Journal of Climatology, 34(8), 2308-2319. DOI: 10.1002/joc.3839"),
         bullet("[5] Chung, U., Jung, J.E., Seo, H.C., & Yun, J.I. (2009). Using urban effect corrected temperature data and a tree phenology model to project geographical shift of cherry flowering date in South Korea. Climatic Change, 93, 447-463."),
         bullet("[6] Nagai, S., Saitoh, T.M., & Yoshitake, S. (2019). Cultural ecosystem services provided by flowering of cherry trees under climate change: a case study of the relationship between the periods of flowering and festivals. International Journal of Biometeorology, 63(4), 485-495. DOI: 10.1007/s00484-019-01719-9"),
-      ]),
+      ],
     ],
   }],
 });
 
 Packer.toBuffer(doc).then((buf) => {
-  fs.writeFileSync("진해벚꽃_개화예측_분석보고서_v7.docx", buf);
+  fs.writeFileSync("진해벚꽃_개화예측_분석보고서_v8.docx", buf);
   console.log("written");
 });
