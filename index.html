@@ -332,6 +332,7 @@ let currentTarget = 'gaehwa';
 
 function populateYearSelect() {
   const sel = document.getElementById('yearSelect');
+  const prevYear = +sel.value;
   sel.innerHTML = '';
   const years = availableYears(MODEL_CFG[currentTarget]);
   years.forEach(y => {
@@ -339,7 +340,7 @@ function populateYearSelect() {
     opt.value = y; opt.textContent = y + '년';
     sel.appendChild(opt);
   });
-  sel.value = years[years.length-1];
+  sel.value = years.includes(prevYear) ? prevYear : years[years.length-1];
 }
 
 function render() {
