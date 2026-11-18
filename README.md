@@ -44,22 +44,6 @@ web-demo/
 - 기상청 계절관측(생물계절) 자료 — 벚나무 개화·만발 관측일 (공식 평년값 포함)
 - 통계청 SGIS 시도 경계 데이터 — 전국 개화전선 지도용 행정구역 경계
 
-## ⚙️ 재현 방법
-
-```bash
-# 보고서 생성 (docx)
-cd 보고서
-npm install
-node build_report.js
-
-# 차트 생성 (matplotlib)
-python make_charts.py
-python make_charts2.py
-
-# 전국 개화전선 등 분석
-cd ../기상데이터
-python national_analysis.py
-```
 
 ## 🖋 크레딧
 
